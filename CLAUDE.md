@@ -272,5 +272,83 @@ sudo -u daemon php /bitnami/moodle/admin/cli/upgrade.php
 └── lang/en/                  # Language strings
 ```
 
+## Claude Code Development Guide
+
+### 필수 워크플로우 (Always Follow)
+
+#### 1. PATH 설정 (모든 명령 전에 필수)
+```bash
+export PATH=/opt/bitnami/common/bin:/opt/bitnami/common/sbin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
+```
+
+#### 2. 코드 변경 후 순서
+1. Python 코드 변경 시:
+   ```bash
+   sudo systemctl restart moodle-superclaude-bridge
+   ```
+2. PHP 코드 변경 시:
+   ```bash
+   sudo -u daemon php /bitnami/moodle/admin/cli/purge_caches.php
+   ```
+3. 플러그인 구조 변경 시:
+   ```bash
+   sudo -u daemon php /bitnami/moodle/admin/cli/upgrade.php --non-interactive
+   ```
+
+### 자주 사용하는 명령어 모음
+
+#### 브리지 상태 확인 및 디버깅
+```bash
+# 빠른 상태 체크
+curl http://localhost:5000/api/health
+
+# 서비스 상태 및 로그
+sudo systemctl status moodle-superclaude-bridge
+sudo journalctl -u moodle-superclaude-bridge -f
+
+# API 테스트
+curl http://localhost:5000/api/analyze/course/1 | python3 -m json.tool
+```
+
+#### Moodle 플러그인 작업
+```bash
+# 플러그인 파일 위치
+cd /bitnami/moodle/local/superclaude/
+
+# 주요 파일 편집
+vi lib.php        # 핵심 함수
+vi index.php      # 메인 UI
+vi action.php     # 액션 처리
+
+# 변경 적용
+sudo -u daemon php /bitnami/moodle/admin/cli/purge_caches.php
+```
+
+#### 데이터베이스 작업
+```bash
+# DB 접속 (비밀번호 포함)
+/opt/bitnami/mariadb/bin/mysql -u bn_moodle -pf1f8ceff198c560307a453122015b939192d07196075754478bca45bb2dc4ea6 bitnami_moodle
+
+# 유용한 쿼리들
+SELECT * FROM mdl_config WHERE name LIKE '%superclaude%';
+SELECT * FROM mdl_capabilities WHERE component = 'local_superclaude';
+```
+
+### 문제 해결 Quick Reference
+
+| 증상 | 해결 방법 |
+|------|----------|
+| "Bridge not available" | `sudo systemctl restart moodle-superclaude-bridge` |
+| 플러그인이 보이지 않음 | `sudo -u daemon php /bitnami/moodle/admin/cli/purge_caches.php` |
+| PATH 명령어 오류 | 위의 PATH export 명령 실행 |
+| DB 접속 오류 | MariaDB 서비스 확인: `sudo systemctl status mariadb` |
+
+### 개발 시 주의사항
+1. **절대 경로 사용**: PHP에서 브리지 파일 참조 시 항상 절대 경로 사용
+2. **캐시 정리**: 모든 PHP 변경 후 캐시 정리 필수
+3. **로그 확인**: 오류 시 브리지 로그와 Moodle 디버그 로그 모두 확인
+4. **백업**: 중요 변경 전 백업 생성
+
 ## Last Updated
 2025-08-01 - SuperClaude v3.0.0 with PHP-Python Bridge Integration Complete
+- CLAUDE.md Development Guide 추가
