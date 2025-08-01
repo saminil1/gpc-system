@@ -1,0 +1,110 @@
+{
+  "system_info": {
+    "platform": "Linux (container environment)",
+    "web_root": "/bitnami/moodle",
+    "web_root_actual": "/opt/bitnami/moodle",
+    "data_directory": "/bitnami/moodledata",
+    "analysis_date": "2025-08-01"
+  },
+  "moodle_version": {
+    "version": "5.0.1",
+    "build": "20250609",
+    "branch": "500",
+    "maturity": "MATURITY_STABLE",
+    "internal_version": "2025041401.00"
+  },
+  "server_stack": {
+    "php": {
+      "version": "8.2.29",
+      "extensions": ["Zend OPcache"]
+    },
+    "database": {
+      "type": "MariaDB",
+      "port": 3306,
+      "host": "127.0.0.1"
+    },
+    "web_server": {
+      "type": "Apache",
+      "ports": [80, 443]
+    },
+    "php_fpm": {
+      "enabled": true
+    }
+  },
+  "database_config": {
+    "type": "mariadb",
+    "host": "127.0.0.1",
+    "port": 3306,
+    "database": "bitnami_moodle",
+    "username": "bn_moodle",
+    "collation": "utf8mb4_unicode_520_nopad_ci",
+    "prefix": "mdl_"
+  },
+  "running_processes": [
+    "MariaDB server",
+    "Apache HTTPD",
+    "PHP-FPM workers",
+    "Moodle cron jobs"
+  ],
+  "installed_modules": [
+    {"name": "assign", "description": "Assignment"},
+    {"name": "bigbluebuttonbn", "description": "BigBlueButton"},
+    {"name": "book", "description": "Book"},
+    {"name": "choice", "description": "Choice"},
+    {"name": "data", "description": "Database"},
+    {"name": "feedback", "description": "Feedback"},
+    {"name": "folder", "description": "Folder"},
+    {"name": "forum", "description": "Forum"},
+    {"name": "glossary", "description": "Glossary"},
+    {"name": "h5pactivity", "description": "H5P Activity"},
+    {"name": "lesson", "description": "Lesson"},
+    {"name": "lti", "description": "External tool"},
+    {"name": "quiz", "description": "Quiz"},
+    {"name": "resource", "description": "Resource"},
+    {"name": "scorm", "description": "SCORM package"},
+    {"name": "wiki", "description": "Wiki"},
+    {"name": "workshop", "description": "Workshop"},
+    {"name": "subsection", "description": "Subsection"},
+    {"name": "page", "description": "Page"},
+    {"name": "label", "description": "Label"},
+    {"name": "url", "description": "URL"}
+  ],
+  "security_cache": {
+    "session_storage": "/bitnami/moodledata/sessions/",
+    "cache_type": "file-based",
+    "security_key": "Sodium encryption key configured"
+  },
+  "issues": [
+    "sendmail not installed (email sending disabled)",
+    "PATH environment variable issues",
+    "Multiple cron processes running simultaneously"
+  ],
+  "directory_structure": {
+    "/bitnami/moodle": "Moodle core files",
+    "/bitnami/moodledata": {
+      "cache": "Cache files",
+      "filedir": "Uploaded files",
+      "lang": "Language files",
+      "localcache": "Local cache",
+      "muc": "MUC configuration",
+      "sessions": "Session files",
+      "temp": "Temporary files",
+      "trashdir": "Trash directory"
+    },
+    "/bitnami/mariadb": "MariaDB data"
+  },
+  "network_config": {
+    "http": {
+      "port": 80,
+      "interface": "all"
+    },
+    "https": {
+      "port": 443,
+      "interface": "all"
+    },
+    "mysql": {
+      "port": 3306,
+      "interface": "localhost"
+    }
+  }
+}

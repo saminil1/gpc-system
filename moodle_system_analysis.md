@@ -1,0 +1,89 @@
+# Bitnami Moodle 시스템 분석 결과
+
+## 시스템 환경
+- **플랫폼**: Linux (컨테이너 환경)
+- **웹 루트**: `/bitnami/moodle` (심볼릭 링크 → `/opt/bitnami/moodle`)
+- **데이터 디렉토리**: `/bitnami/moodledata`
+- **분석 일시**: 2025-08-01
+
+## Moodle 버전 정보
+- **버전**: 5.0.1 (Build: 20250609)
+- **브랜치**: 500
+- **안정성**: MATURITY_STABLE
+- **내부 버전**: 2025041401.00
+
+## 서버 스택
+- **PHP**: 8.2.29 (Zend OPcache 포함)
+- **데이터베이스**: MariaDB (포트 3306)
+- **웹 서버**: Apache (포트 80, 443)
+- **PHP-FPM**: 활성화됨
+
+## 주요 구성 요소
+
+### 1. 데이터베이스 설정
+- **타입**: MariaDB
+- **호스트**: 127.0.0.1:3306
+- **데이터베이스명**: bitnami_moodle
+- **사용자**: bn_moodle
+- **Collation**: utf8mb4_unicode_520_nopad_ci
+
+### 2. 실행 중인 프로세스
+- MariaDB 서버
+- Apache HTTPD
+- PHP-FPM (worker 프로세스 여러개)
+- Moodle 크론 작업 (여러 인스턴스 실행 중)
+
+### 3. 설치된 모듈 (활성화)
+- assign (과제)
+- bigbluebuttonbn (화상회의)
+- book (책)
+- choice (선택)
+- data (데이터베이스)
+- feedback (피드백)
+- folder (폴더)
+- forum (포럼)
+- glossary (용어집)
+- h5pactivity (H5P 활동)
+- lesson (강의)
+- lti (외부 도구)
+- quiz (퀴즈)
+- resource (자료)
+- scorm (SCORM 패키지)
+- wiki (위키)
+- workshop (워크샵)
+- subsection (하위 섹션)
+- page (페이지)
+- label (라벨)
+- url (URL)
+
+### 4. 보안 및 캐시
+- **세션 저장소**: 파일 시스템 (/bitnami/moodledata/sessions/)
+- **캐시 설정**: 기본 파일 기반 캐시
+- **보안 키**: Sodium 암호화 키 설정됨
+
+### 5. 특이사항
+- sendmail이 설치되지 않음 (이메일 전송 불가)
+- PATH 환경변수 문제로 일부 명령어 실행 시 전체 경로 필요
+- 다중 크론 프로세스가 동시 실행 중
+- 파일 권한: 02775 (디렉토리)
+
+## 디렉토리 구조
+```
+/bitnami/
+├── moodle/          # Moodle 코어 파일
+├── moodledata/      # Moodle 데이터 파일
+│   ├── cache/       # 캐시 파일
+│   ├── filedir/     # 업로드된 파일
+│   ├── lang/        # 언어 파일
+│   ├── localcache/  # 로컬 캐시
+│   ├── muc/         # MUC 설정
+│   ├── sessions/    # 세션 파일
+│   ├── temp/        # 임시 파일
+│   └── trashdir/    # 휴지통
+└── mariadb/        # MariaDB 데이터
+```
+
+## 네트워크 설정
+- HTTP: 포트 80 (모든 인터페이스)
+- HTTPS: 포트 443 (모든 인터페이스)
+- MySQL/MariaDB: 포트 3306 (localhost만)
